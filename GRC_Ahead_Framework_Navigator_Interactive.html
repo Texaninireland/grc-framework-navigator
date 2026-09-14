@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GRC Ahead Framework Navigator</title>
+<style>
+:root{
+  --navy:#0a223d; --navy2:#123b61; --gold:#d2a84c; --cream:#f7f2e6;
+  --ink:#223044; --muted:#667386; --line:#d9e0e7; --green:#e3f2e8;
+  --greenText:#1f6b46; --amber:#fff3d6; --amberText:#9a6500; --grey:#eef2f5;
+  --red:#f8e2e2; --white:#fff; --shadow:0 16px 40px rgba(8,32,57,.12);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f7fa;color:var(--ink)}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#0d3459 100%);color:#fff;padding:28px 0 24px;border-bottom:4px solid var(--gold)}
+.wrap{max-width:1180px;margin:auto;padding:0 22px}
+.brand{display:flex;gap:18px;align-items:center}
+.shield{width:58px;height:68px;border:3px solid var(--gold);border-radius:10px 10px 20px 20px;display:grid;place-items:center;font-weight:800;color:var(--gold);font-size:22px}
+.hero h1{margin:0;font-family:Georgia,serif;font-size:34px;letter-spacing:.2px}
+.hero .sub{margin:7px 0 0;color:#dce8f2;font-size:16px}
+.hero .method{margin-top:18px;color:var(--gold);font-weight:700;letter-spacing:1.5px}
+.main{padding:26px 0 60px}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:22px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.side{position:sticky;top:18px;overflow:hidden}
+.sidehead{padding:20px 20px 14px;background:linear-gradient(180deg,#fff,#fbfcfd);border-bottom:1px solid var(--line)}
+.sidehead h2,.results h2,.overlap h2{margin:0;color:var(--navy);font-family:Georgia,serif}
+.progress{height:10px;background:#e7edf2;border-radius:100px;overflow:hidden;margin-top:14px}
+.progress > div{height:100%;background:linear-gradient(90deg,var(--gold),#efc86e);width:0;transition:.25s}
+.count{font-size:13px;color:var(--muted);margin-top:7px}
+.navsteps{padding:10px}
+.stepbtn{width:100%;text-align:left;border:0;background:transparent;padding:12px 13px;border-radius:10px;color:var(--ink);font-weight:650;cursor:pointer}
+.stepbtn.active{background:var(--navy);color:#fff}
+.stepbtn:hover{background:#eef3f7}
+.stepbtn.active:hover{background:var(--navy)}
+.sidecta{padding:18px;border-top:1px solid var(--line);background:var(--cream)}
+.sidecta strong{color:var(--navy)}
+.content{display:flex;flex-direction:column;gap:22px}
+.panel{padding:24px}
+.panel h3{margin:0 0 6px;color:var(--navy);font-size:22px}
+.panel p.lead{margin:0 0 20px;color:var(--muted)}
+.q{padding:16px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0}
+.qtitle{font-weight:700;color:var(--navy);line-height:1.35}
+.qwhy{font-size:13px;color:var(--muted);margin:5px 0 10px}
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choice{border:1px solid #cfd8e1;background:#fff;padding:9px 14px;border-radius:999px;cursor:pointer;font-weight:700;color:#3c4d5d}
+.choice.selected{background:var(--navy);border-color:var(--navy);color:#fff}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+button.primary,button.secondary{padding:11px 16px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+.primary{background:var(--gold);color:var(--navy)}
+.secondary{background:#eaf0f5;color:var(--navy)}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 6px}
+.stat{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fbfcfd}
+.stat b{display:block;font-size:26px;color:var(--navy)}
+.stat span{font-size:12px;color:var(--muted)}
+.tablewrap{overflow:auto;margin-top:14px}
+table{width:100%;border-collapse:collapse;min-width:800px}
+th{background:var(--navy);color:#fff;padding:12px;text-align:left;font-size:12px;letter-spacing:.3px}
+td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.good{background:var(--green);color:var(--greenText)}
+.warn{background:var(--amber);color:var(--amberText)}
+.neutral{background:var(--grey);color:#5c6a79}
+.high{font-weight:800;color:#8b5400}
+.overlapgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.cap{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.cap .top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.cap h4{margin:0;color:var(--navy)}
+.cap p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.notice{background:#eef5fb;border-left:4px solid var(--navy2);padding:14px;border-radius:8px;color:#3f5367}
+.footercta{background:linear-gradient(135deg,var(--navy),#123f69);color:#fff;padding:24px;border-radius:14px}
+.footercta h3{color:#fff}
+.footercta p{color:#dbe7f1}
+.small{font-size:12px;color:var(--muted)}
+.hidden{display:none}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.side{position:relative;top:0}.summary{grid-template-columns:1fr}.overlapgrid{grid-template-columns:1fr}}
+@media print{.hero,.side,.actions,.footercta{display:none!important}.grid{display:block}.card{box-shadow:none}.main{padding:0}.panel{padding:10px}.hidden{display:block!important}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">
+      <div class="shield">GRC</div>
+      <div>
+        <h1>GRC Ahead — Framework Navigator</h1>
+        <div class="sub">Find what may apply. Understand the overlap. Know where to start.</div>
+        <div class="method">LEARN → IMPLEMENT → EVIDENCE</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+<div class="wrap grid">
+  <aside class="card side">
+    <div class="sidehead">
+      <h2>Your journey</h2>
+      <div class="progress"><div id="bar"></div></div>
+      <div class="count" id="count">0 of 18 answered</div>
+    </div>
+    <div class="navsteps">
+      <button class="stepbtn active" data-section="assessment">1. Organisation Assessment</button>
+      <button class="stepbtn" data-section="results">2. Your GRC Map</button>
+      <button class="stepbtn" data-section="overlap">3. Overlap Map</button>
+      <button class="stepbtn" data-section="next">4. Next Steps</button>
+    </div>
+    <div class="sidecta">
+      <strong>Free scoping tool</strong>
+      <div class="small" style="margin-top:6px">This is an initial governance screening aid, not legal advice or a definitive applicability determination.</div>
+    </div>
+  </aside>
+
+  <section class="content">
+    <div id="assessment" class="card panel section">
+      <h3>Tell us about your organisation</h3>
+      <p class="lead">Answer each question with Yes, No or Unsure. Your GRC Map updates instantly.</p>
+      <div id="questions"></div>
+      <div class="actions">
+        <button class="secondary" onclick="resetAll()">Reset</button>
+        <button class="primary" onclick="showSection('results')">See My GRC Map</button>
+      </div>
+    </div>
+
+    <div id="results" class="card panel section hidden results">
+      <h2>Your GRC Map</h2>
+      <p class="lead">A tailored starting point based on the information you provided.</p>
+      <div class="summary">
+        <div class="stat"><b id="checkCount">0</b><span>items to check for applicability</span></div>
+        <div class="stat"><b id="recCount">0</b><span>recommended standards/frameworks</span></div>
+        <div class="stat"><b id="capCount">0</b><span>priority governance capabilities</span></div>
+      </div>
+      <div class="notice">“Check applicability” means the topic deserves a more detailed assessment before you treat it as mandatory.</div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Requirement / Framework</th><th>Your Result</th><th>Type</th><th>Why It Appears</th><th>What to Check Next</th></tr></thead>
+        <tbody id="mapBody"></tbody>
+      </table></div>
+      <div class="actions"><button class="secondary" onclick="window.print()">Print / Save as PDF</button><button class="primary" onclick="showSection('overlap')">View Overlap Map</button></div>
+    </div>
+
+    <div id="overlap" class="card panel section hidden overlap">
+      <h2>Overlap Map</h2>
+      <p class="lead">Build strong governance capabilities once, then map them to the specific requirements they support.</p>
+      <div class="overlapgrid" id="overlapGrid"></div>
+      <div class="actions"><button class="primary" onclick="showSection('next')">See Next Steps</button></div>
+    </div>
+
+    <div id="next" class="card panel section hidden">
+      <h3>Turn your map into action</h3>
+      <p class="lead">Your map identifies where to investigate. The next stage is implementation.</p>
+      <div id="nextList"></div>
+      <div class="footercta" style="margin-top:18px">
+        <h3>Ready to implement?</h3>
+        <p>GRC Ahead helps organisations move from “what applies?” to practical implementation with structured pathways, editable tools, assessments, registers and evidence-focused resources.</p>
+        <strong>LEARN → IMPLEMENT → EVIDENCE</strong>
+      </div>
+      <div class="small" style="margin-top:14px">Important: laws and obligations can depend on jurisdiction, role, sector, size, activity, system classification and contractual requirements. Always confirm detailed applicability before relying on a result.</div>
+    </div>
+  </section>
+</div>
+</main>
+
+<script>
+const Q = [
+['q1','Geography','Is your organisation established in Ireland or another EU/EEA country?','EU establishment can bring EU regulatory regimes into scope.'],
+['q2','Geography','Do you offer goods/services to, or monitor, people in the EU/EEA?','Can matter to GDPR territorial scope for organisations outside the EU.'],
+['q3','Geography','Do you operate, sell, employ people, or provide services in the United States?','US requirements can arise at federal, state, local, sector and contractual level.'],
+['q4','Geography','Do you operate, sell, employ people, or provide services in the United Kingdom?','UK data, cyber and AI-related requirements may need separate assessment.'],
+['q5','Data','Do you process personal data about customers, employees, users or other individuals?','Personal-data processing can trigger data-protection obligations.'],
+['q6','Data','Do you process special-category, highly sensitive or high-impact personal data?','Higher-risk processing can require stronger governance and assessment.'],
+['q7','AI','Does your organisation use AI systems or general-purpose AI tools?','AI use creates governance, risk, accountability and evidence needs.'],
+['q8','AI','Do you develop, provide, import, distribute or materially modify AI systems/models?','Provider/importer/distributor roles can create different AI obligations.'],
+['q9','AI','Is AI used for employment, credit, essential services, biometrics, safety, education or other high-impact decisions?','High-impact uses can trigger additional legal and governance requirements.'],
+['q10','AI','Do you want a formal AI management system or recognised AI governance standard?','Supports consideration of ISO/IEC 42001.'],
+['q11','AI','Do you want a voluntary cross-sector AI risk-management framework?','Supports consideration of NIST AI RMF.'],
+['q12','Security','Do you want a structured or certifiable information-security management system?','Supports consideration of ISO/IEC 27001.'],
+['q13','Cyber / Sector','Could your organisation fall within an EU critical or important sector such as energy, transport, health, digital infrastructure or certain digital services?','NIS2 applicability is sector/entity and national-law specific.'],
+['q14','Financial Services','Are you an EU financial entity, or do you provide ICT services to financial entities?','DORA may be relevant to specified financial entities and ICT third-party risk.'],
+['q15','Third Parties','Do critical suppliers, cloud providers or AI vendors materially support your operations?','Third-party governance is a recurring requirement across GRC regimes.'],
+['q16','Assurance','Do customers, tenders, contracts or regulators ask you to demonstrate formal governance or controls?','Contractual and assurance requirements can make voluntary standards commercially important.'],
+['q17','Assurance','Do you need stronger evidence for audit, board, customer or regulatory review?','Evidence design is central to proving governance operates in practice.'],
+['q18','Objective','Are you trying to reduce duplicated controls across multiple frameworks?','Activates the overlap and common-control approach.']
+];
+
+let A = {};
+Q.forEach((q,i)=>A[q[0]] = ['yes','no','unsure'][i%3]); // sample defaults
+function ans(id){return A[id]}
+function anyUnsure(...ids){return ids.some(id=>ans(id)==='unsure')}
+
+function statusClass(s){
+  if(['Likely relevant','Recommended','Priority capability'].includes(s)) return 'good';
+  if(['Check applicability','Consider'].includes(s)) return 'warn';
+  return 'neutral';
+}
+
+function computeMap(){
+  const out=[];
+  let gdpr = (ans('q5')==='yes' && (ans('q1')==='yes'||ans('q2')==='yes')) ? 'Likely relevant' : anyUnsure('q1','q2','q5') ? 'Check applicability' : 'Not triggered';
+  out.push(['GDPR',gdpr,'Law / Regulation','Personal data + EU territorial connection','Territorial scope; controller/processor role; lawful basis; higher-risk processing']);
+
+  let aia = (ans('q7')==='yes'||ans('q8')==='yes') && (ans('q1')==='yes'||ans('q2')==='yes') ? 'Check applicability' : anyUnsure('q1','q2','q7','q8') ? 'Check applicability' : 'Not triggered';
+  out.push(['EU AI Act',aia,'Law / Regulation','AI activity with an EU connection','Role; territorial scope; system/model status; prohibited/high-risk/transparency/GPAI considerations']);
+
+  let us = ans('q3')==='yes' || (ans('q9')==='yes' && ans('q3')!=='no') ? 'Check applicability' : ans('q3')==='unsure' ? 'Check applicability' : 'Not triggered';
+  out.push(['US AI Requirements',us,'Law / Regulation landscape','US operations and/or high-impact AI','Federal, state, local, sector, employment/consumer and contractual requirements']);
+
+  let uk = ans('q4')==='yes' ? 'Check applicability' : ans('q4')==='unsure' ? 'Check applicability' : 'Not triggered';
+  out.push(['UK Data / AI Requirements',uk,'Law / Regulation landscape','UK operations and data/AI use','UK GDPR/data protection plus sector/use-specific AI and cyber requirements']);
+
+  let iso42 = ans('q10')==='yes' ? 'Recommended' : ans('q10')==='unsure' ? 'Consider' : 'Not selected';
+  out.push(['ISO/IEC 42001',iso42,'International Standard','Formal AI management-system objective','AIMS scope, leadership, risk, controls, monitoring and continual improvement']);
+
+  let nist = ans('q11')==='yes' ? 'Recommended' : ans('q11')==='unsure' ? 'Consider' : 'Not selected';
+  out.push(['NIST AI RMF',nist,'Voluntary Framework','AI risk-management objective','Govern, Map, Measure and Manage practices appropriate to your AI context']);
+
+  let iso27 = ans('q12')==='yes' ? 'Recommended' : ans('q12')==='unsure' ? 'Consider' : 'Not selected';
+  out.push(['ISO/IEC 27001',iso27,'International Standard','Information-security management objective','ISMS scope, risk treatment, controls, evidence and certification objective']);
+
+  let nis2 = ans('q13')==='yes' ? 'Check applicability' : ans('q13')==='unsure' ? 'Check applicability' : 'Not triggered';
+  out.push(['NIS2',nis2,'EU Directive / national law','Potential EU critical/important-sector exposure','Sector, entity type/size, Member State implementing law and exclusions']);
+
+  let dora = ans('q14')==='yes' ? 'Check applicability' : ans('q14')==='unsure' ? 'Check applicability' : 'Not triggered';
+  out.push(['DORA',dora,'EU Regulation','Potential EU financial-sector / ICT exposure','Entity category, ICT risk, incident, testing and third-party requirements']);
+
+  let tp = ans('q15')==='yes' ? 'Priority capability' : ans('q15')==='unsure' ? 'Consider' : 'Standard capability';
+  out.push(['Third-Party Governance',tp,'Cross-framework capability','Material supplier / cloud / AI vendor dependency','Due diligence, contracting, risk, monitoring, evidence and exit arrangements']);
+
+  let ev = ans('q17')==='yes' ? 'Priority capability' : ans('q17')==='unsure' ? 'Consider' : 'Standard capability';
+  out.push(['Audit & Evidence Readiness',ev,'Cross-framework capability','Need to demonstrate governance to stakeholders','Evidence ownership, retention, review cadence, testing and reporting']);
+  return out;
+}
+
+const capabilities = [
+['Governance & accountability','Roles, ownership, oversight, escalation and reporting'],
+['Inventory & scope','Know the systems, data, services, assets and third parties in scope'],
+['Risk & impact assessment','Use a common risk method plus framework-specific criteria'],
+['Policies & controls','Build one control library with traceability'],
+['Third-party governance','Use consistent due diligence, contracting, monitoring and exit arrangements'],
+['Incident management','Use a common process plus regime-specific notification and escalation'],
+['Monitoring & testing','Review controls, changes, performance and regulatory developments'],
+['Evidence & records','Retain evidence once and map it to supported requirements'],
+['Management / board reporting','Use consistent reporting with framework-specific metrics where needed']
+];
+
+function capPriority(name){
+  if(name.includes('Third')) return ans('q15')==='yes'?'High':'Core';
+  if(name.includes('Evidence')||name.includes('reporting')) return ans('q17')==='yes'?'High':'Core';
+  if(name.includes('Risk')) return (ans('q9')==='yes'||ans('q13')==='yes')?'High':'Core';
+  if(name.includes('Inventory')) return ans('q7')==='yes'?'High':'Core';
+  if(name.includes('Policies')) return ans('q18')==='yes'?'High':'Core';
+  return 'Core';
+}
+
+function renderQuestions(){
+  const el=document.getElementById('questions'); el.innerHTML='';
+  Q.forEach(([id,area,text,why])=>{
+    const d=document.createElement('div'); d.className='q';
+    d.innerHTML=`<div class="qtitle">${area}: ${text}</div><div class="qwhy">${why}</div>
+    <div class="choices">
+      ${['yes','no','unsure'].map(v=>`<button class="choice ${A[id]===v?'selected':''}" onclick="setAnswer('${id}','${v}')">${v[0].toUpperCase()+v.slice(1)}</button>`).join('')}
+    </div>`;
+    el.appendChild(d);
+  });
+  updateProgress();
+}
+function setAnswer(id,v){A[id]=v;renderQuestions();renderResults();renderOverlap();renderNext();}
+function updateProgress(){
+  const n=Object.values(A).filter(Boolean).length;
+  document.getElementById('count').textContent=`${n} of ${Q.length} answered`;
+  document.getElementById('bar').style.width=`${(n/Q.length)*100}%`;
+}
+function renderResults(){
+  const rows=computeMap(); const body=document.getElementById('mapBody'); body.innerHTML='';
+  rows.forEach(r=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><b>${r[0]}</b></td><td><span class="badge ${statusClass(r[1])}">${r[1]}</span></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td>`;
+    body.appendChild(tr);
+  });
+  document.getElementById('checkCount').textContent=rows.filter(r=>['Check applicability','Likely relevant'].includes(r[1])).length;
+  document.getElementById('recCount').textContent=rows.filter(r=>r[1]==='Recommended').length;
+  document.getElementById('capCount').textContent=rows.filter(r=>r[1]==='Priority capability').length;
+}
+function renderOverlap(){
+  const el=document.getElementById('overlapGrid'); el.innerHTML='';
+  capabilities.forEach(c=>{
+    const p=capPriority(c[0]);
+    el.innerHTML+=`<div class="cap"><div class="top"><h4>${c[0]}</h4><span class="badge ${p==='High'?'warn':'good'}">${p}</span></div><p>${c[1]}</p></div>`;
+  });
+}
+function renderNext(){
+  const rows=[
+    ['1','Confirm applicability of high-priority legal/regulatory results','Avoid treating broad screening as a legal conclusion'],
+    ['2','Define governance ownership and accountability','Someone must own decisions, controls, escalation and reporting'],
+    ['3','Create or validate inventories and scope','You cannot govern what you have not identified'],
+    ['4','Assess risk, impact and control gaps','Prioritise action based on actual exposure'],
+    ['5','Implement common controls and framework-specific overlays','Reduce duplication while preserving traceability'],
+    ['6','Build evidence, monitoring and reporting','Demonstrate that governance is operating, not just documented']
+  ];
+  document.getElementById('nextList').innerHTML=rows.map(r=>`<div class="cap" style="margin-bottom:10px"><div class="top"><h4>${r[0]}. ${r[1]}</h4><span class="badge good">${r[0]<=1?'LEARN':r[0]<=5?'IMPLEMENT':'EVIDENCE'}</span></div><p>${r[2]}</p></div>`).join('');
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(x=>x.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.stepbtn').forEach(b=>b.classList.toggle('active',b.dataset.section===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function resetAll(){
+  A={}; Q.forEach((q,i)=>A[q[0]]=['yes','no','unsure'][i%3]); renderQuestions();renderResults();renderOverlap();renderNext();
+}
+document.querySelectorAll('.stepbtn').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.section)));
+renderQuestions();renderResults();renderOverlap();renderNext();
+</script>
+</body>
+</html>
