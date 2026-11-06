@@ -166,7 +166,8 @@ td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top;font-size
           <a class="offering-link" href="https://www.grcahead.com" target="_blank" rel="noopener noreferrer">Explore GRC Ahead and our services</a>
           <a class="offering-link" href="https://www.grcahead.com" target="_blank" rel="noopener noreferrer">Governance Command Centre — product information coming soon</a>
           <a class="offering-link" href="https://www.grcahead.com" target="_blank" rel="noopener noreferrer">AI Governance Edition — product information coming soon</a>
-          <a class="offering-link" href="https://www.grcahead.com" target="_blank" rel="noopener noreferrer">$100 paid 45-minute consultation — find booking details on our website</a>
+          <a class="offering-link" href="https://grcahead.com/ai-governance-gap-assessment" target="_blank" rel="noopener noreferrer">AI Governance Gap Assessment: $495 USD fixed-fee professional review</a>
+          <a class="offering-link" href="https://grcahead.com/discovery-call" target="_blank" rel="noopener noreferrer">$100 paid 45-minute consultation</a>
         </div>
         <p style="font-size:12px;margin-top:16px">Software purchases are not available through this assessment until the relevant products have passed release checks and their product pages are live.</p>
       </div>
@@ -287,10 +288,11 @@ function renderRecommendation(){
   const detail=document.getElementById('recommendationText');
   const action=document.getElementById('primaryRecommendation');
   if(!isComplete){detail.textContent='Complete all eight questions to receive a recommendation tailored to your responses.';action.innerHTML='';return;}
-  let message, label;
+  let message, label, href='https://www.grcahead.com';
   if(noCount>=4 || (A.q2==='no' && A.q3==='no')){
-    message='Several foundations of AI governance appear to be missing. A paid consultation can help you decide what to prioritise before choosing software or undertaking a formal readiness assessment.';
-    label='Explore the $100 paid consultation';
+    message='Several foundations of AI governance appear to be missing. Start with the fixed-fee $495 USD AI Governance Gap Assessment for a written review and a practical 30-day action plan, or book a $100 paid consultation to decide what to prioritise.';
+    label='Explore the $495 AI Governance Gap Assessment';
+    href='https://grcahead.com/ai-governance-gap-assessment';
   }else if(noCount>=1 || unsureCount>=3){
     message='You have some governance practices in place, but there are gaps or uncertainties to address. GRC Ahead’s AI Governance Edition is designed for organisations looking to structure their AI governance work. Product details will be published after release approval.';
     label='Explore GRC Ahead’s AI governance services';
@@ -299,7 +301,7 @@ function renderRecommendation(){
     label='Explore GRC Ahead’s governance solutions';
   }
   detail.textContent=message;
-  const link=document.createElement('a');link.className='recommendation-button';link.href='https://www.grcahead.com';link.target='_blank';link.rel='noopener noreferrer';link.textContent=label;
+  const link=document.createElement('a');link.className='recommendation-button';link.href=href;link.target='_blank';link.rel='noopener noreferrer';link.textContent=label;
   action.replaceChildren(link);
 }
 function showSection(id){
